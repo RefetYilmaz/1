@@ -1,0 +1,64 @@
+#include <stdio.h>
+#include <stdlib.h>
+int r(){
+    printf("\n");
+    return 0;
+}
+typedef struct ogrenci{
+    int no;
+    char ad_soyad[50];
+}ins;
+int main(){
+    const int ref = 3;
+    ins ogrenciler[ref];
+    int i =0;
+    while(i < ref){
+        printf("%d. ogrencinin numarasini ve ad_soyadini giriniz",i+1);
+        r();
+        scanf("%d",&ogrenciler[i].no);
+        scanf("%s",ogrenciler[i].ad_soyad);
+        i++;
+    }
+    int r = 0;
+    while(r < ref){
+        printf("%d. ogrencinin numarasi = %d\nad_soyadi = %s\n",r+1,ogrenciler[r].no,ogrenciler[r].ad_soyad);
+        r++;
+    }
+    FILE *dosya = fopen("refet.txt","a");
+    if(!dosya){
+        printf("dosya acilamadi");
+        exit(1);
+    }
+    i = 0;
+    while(i < ref){
+        fprintf(dosya,"%d. öğrenci = %d %s\n",i+1,ogrenciler[i].no,ogrenciler[i].ad_soyad);
+        i++;
+    }
+    if(dosya){
+        printf("basarili\n");
+        fclose(dosya);
+    }
+    dosya = fopen("refet.txt","r");
+    if(!dosya){
+        printf("dosya acilamadi");
+        exit(1);
+    }
+    if(dosya){
+        printf("dosya acma islemi basarili\n");
+    }
+    i = 0;
+    ins *u = (ins *)malloc(sizeof(ins)*2);
+    printf("numara\tad_soyad\n");
+    while(!feof (dosya)){
+        fscanf(dosya,"%d %s",&(u[i].no),u[i].ad_soyad);
+        printf("%d\t%s",u[i].no,u[i].ad_soyad);
+        i++;
+        if(i % 2 == 0){
+            u = realloc(u,sizeof(ins)*(i+2));
+        }
+    }
+    if(dosya)
+        fclose(dosya);
+    getchar();
+    return 0;
+}
